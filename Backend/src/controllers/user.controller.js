@@ -97,6 +97,7 @@ export const login = async () => {
          })
          .json({
             message: `Welcome back! ${user.fullname}`,
+            user,
             success: true,
          });
    } catch (error) {
@@ -114,3 +115,68 @@ export const logout = async (req, res) => {
       console.log(error, "Something error in log outting the user");
    }
 };
+
+export const updateProfile = async (req, res) => {
+    try {
+    
+      const { fullname, email, phoneNumber, bio, skills } = res.body;
+      const file = req.file;
+
+      if (!fullname || !email || phoneNumber || !bio || !skills) {
+         return res.status(400).json({
+            message: "Something is missing in the required field ",
+            success: false,
+         });
+      }
+
+      if(!file){
+        return res.status(400).json({
+            message: 'Cannot Found the file',
+            success: false
+        })
+      }
+
+      const skillsArray = skills.split(",");
+      const userId = req.id;   // middleware authentication 
+
+      let user = await findById(userId)
+      if(!user){
+        return res.status(400).json({
+            message:'user not found',
+            success:false
+        })
+      }
+
+      /* ======UPDATING THE DATA IN THE DATABASE ======*/
+        user.fullname = fullname,
+        user.email = email,
+        user.phoneNumber = phoneNumber,
+        user.profile.bio = bio,
+        user.profile.skills = skillsArray
+
+      /* ================ RESUME COMES LATER ===========*/
+
+
+        await user.save();
+
+       user = {
+         _id: user._id,
+         fullname: user.fullname,
+         email: user.email,
+         phoneNumber: user.phoneNumber,
+         role: user.role,
+         profile: user.profile,
+      };
+
+      return res
+         .status(200)
+         .json({
+            message: 'Profile updated successfully',
+            user,
+            success: true,
+         });
+
+    } catch (error) {
+        console.log(error, 'Something error in the update the profile of the user')
+    }
+}
