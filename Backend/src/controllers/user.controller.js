@@ -30,16 +30,13 @@ export const register = async (req, res) => {
       });
 
       return res.status(201).json({
-        message:'Account created  sucessfully',
-        success: true
-      })
-
+         message: "Account created  sucessfully",
+         success: true,
+      });
    } catch (error) {
-    console.log(error,'Something error in register the user ')
-
+      console.log(error, "Something error in register the user ");
    }
 };
-
 
 export const login = async () => {
    try {
@@ -83,26 +80,37 @@ export const login = async () => {
       });
 
       user = {
-        _id: user._id,
-        fullname:user.fullname,
-        email:user.email,
-        phoneNumber: user.phoneNumber,
-        role:user.role,
-        profile: user.profile
-      }
+         _id: user._id,
+         fullname: user.fullname,
+         email: user.email,
+         phoneNumber: user.phoneNumber,
+         role: user.role,
+         profile: user.profile,
+      };
 
       return res
          .status(200)
          .cookie("token", token, {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: "strict",
          })
          .json({
             message: `Welcome back! ${user.fullname}`,
             success: true,
          });
    } catch (error) {
-    console.log(error, 'Something error in login the user')
+      console.log(error, "Something error in login the user");
+   }
+};
+
+export const logout = async (req, res) => {
+   try {
+      return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+         message: "Loggout the user successfully",
+         success: true,
+      });
+   } catch (error) {
+      console.log(error, "Something error in log outting the user");
    }
 };
