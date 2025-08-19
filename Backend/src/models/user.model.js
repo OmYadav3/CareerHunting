@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
             required: true
         },
         password:{
-            type: Sring,
+            type: String,
             required: true
         },
         role:{

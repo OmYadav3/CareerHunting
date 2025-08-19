@@ -15,12 +15,12 @@ app.use(express.static("public"))
 app.use(cookieParser())
 
 /* ===========ROUTES IMPORTS============ */
-import userRouter from './routes/user.route.js'
+import userRoute from './routes/user.route.js'
 
 
 
 
 /* ============ROUTES DECELARATIONS============== */
-app.use('/api/v1/users', userRouter)
+app.use('/api/v1/user', userRoute)
 
 export { app }
