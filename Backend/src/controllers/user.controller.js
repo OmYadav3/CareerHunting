@@ -1,16 +1,42 @@
 import {User} from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import jwt from 'jsonwebtoken'
 
 export const register = async (req, res) => {
    try {
-      const { fullname, email, password, phoneNumber, role } = res.body;
+      const { fullname, email, password, phoneNumber, role } = req.body;
 
-      if (!fullname || !email || password || !phoneNumber || !role) {
+      if (!fullname) {
          return res.status(400).json({
-            message: "Something is missing in the required field ",
+            message: `fullname is missing in the required field `,
             success: false,
          });
       }
+      if (!email) {
+         return res.status(400).json({
+            message: `email is missing in the required field`,
+            success: false,
+         });
+      }
+      if (!password) {
+         return res.status(400).json({
+            message: `password is missing in the required field`,
+            success: false,
+         });
+      }
+      if (!phoneNumber) {
+         return res.status(400).json({
+            message: `phoneNumber is missing in the required field `,
+            success: false,
+         });
+      }
+      if (!role) {
+         return res.status(400).json({
+            message: `role is missing in the required field `,
+            success: false,
+         });
+      }
+      
 
       const user = await User.findOne({ email });
       if (user) {
@@ -24,13 +50,13 @@ export const register = async (req, res) => {
       await User.create({
          fullname,
          email,
-         password: hassedPassword,
+         password:hassedPassword,
          phoneNumber,
          role,
       });
 
       return res.status(201).json({
-         message: "Account created  sucessfully",
+         message: "Account created sucessfully",
          success: true,
       });
    } catch (error) {
@@ -38,13 +64,13 @@ export const register = async (req, res) => {
    }
 };
 
-export const login = async () => {
+export const login = async (req, res) => {
    try {
-      const { fullname, email, password } = res.body;
+      const { email, password, role } = req.body;
 
-      if (!fullname || !email || password || !role) {
+      if (!email || !password || !role) {
          return res.status(400).json({
-            message: "Something is missing in the required field ",
+            message: "Something is missing in the required fields",
             success: false,
          });
       }
@@ -52,7 +78,7 @@ export const login = async () => {
       let user = await User.findOne({ email });
       if (!user) {
          return res.status(400).json({
-            message: "user are not exists with this email",
+            message: "User does not exist with this email",
             success: false,
          });
       }
@@ -60,24 +86,23 @@ export const login = async () => {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch) {
          return res.status(400).json({
-            message: "password is incorrect",
+            message: "Password is incorrect",
             success: false,
          });
       }
 
-      if ((role = !user.role)) {
+      if (role !== user.role) {
          return res.status(400).json({
-            message: "Account do not exists with this role",
+            message: "Account does not exist with this role",
             success: false,
          });
       }
 
-      const tokenData = {
-         userId: user._id,
-      };
-      const token = await jwt.sign(tokenData, process.env.SECRET_TOKEN_KEY, {
-         expiresin: "1d",
+      const tokenData = { userId: user._id };
+      const token = jwt.sign(tokenData, process.env.SECRET_TOKEN_KEY, {
+         expiresIn: "1d",
       });
+
 
       user = {
          _id: user._id,
@@ -91,7 +116,7 @@ export const login = async () => {
       return res
          .status(200)
          .cookie("token", token, {
-            maxAge: 1 * 24 * 60 * 60 * 1000,
+            maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
             httpOnly: true,
             sameSite: "strict",
          })
@@ -100,10 +125,16 @@ export const login = async () => {
             user,
             success: true,
          });
+
    } catch (error) {
-      console.log(error, "Something error in login the user");
+      console.error("Error in login:", error);
+      return res.status(500).json({
+         message: "Internal server error",
+         success: false,
+      });
    }
 };
+
 
 export const logout = async (req, res) => {
    try {
@@ -112,14 +143,19 @@ export const logout = async (req, res) => {
          success: true,
       });
    } catch (error) {
-      console.log(error, "Something error in log outting the user");
+       console.error("Error in login:", error);
+      return res.status(500).json({
+         message: "Internal server error",
+         success: false,
+      });
+
    }
 };
 
 export const updateProfile = async (req, res) => {
     try {
     
-      const { fullname, email, phoneNumber, bio, skills } = res.body;
+      const { fullname, email, phoneNumber, bio, skills } = req.body;
       const file = req.file;
 
       if (!fullname || !email || phoneNumber || !bio || !skills) {
@@ -177,6 +213,11 @@ export const updateProfile = async (req, res) => {
          });
 
     } catch (error) {
-        console.log(error, 'Something error in the update the profile of the user')
+        console.error("Error in login:", error);
+      return res.status(500).json({
+         message: "Internal server error",
+         success: false,
+      });
+
     }
 }
