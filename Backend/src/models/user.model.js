@@ -28,9 +28,9 @@ const userSchema = new mongoose.Schema(
             bio:{
                 type: String,
             },
-            skills:{
+            skills:[{
                 type: String
-            },
+            }],
             resume:{
                 type: String
             },
