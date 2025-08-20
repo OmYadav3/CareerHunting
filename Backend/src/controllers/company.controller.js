@@ -1,6 +1,6 @@
 import Company from '../models/company.model.js'
 
-export const registerCompany = async(req, res) =>{
+export const registerCompany = async(req, res) => {
     try {
         const {companyName} = req.body
         if (!companyName) {
@@ -29,8 +29,6 @@ export const registerCompany = async(req, res) =>{
             success:true
         })
 
-
-
     } catch (error) {
         console.log("ERROR TO REGISTER: ", error)
         return res.status(500).json({
@@ -38,5 +36,26 @@ export const registerCompany = async(req, res) =>{
          success: false,
       });
 
+    }
+}
+
+export const getCompany = async (req, res) => {
+    try {
+        
+        const userId = req.id
+        const companies = await Company.find({userId})
+        if (!companies) {
+            return res.status(400).json({
+                message:"Cannot find any company",
+                success:false
+            })
+        }
+        
+    } catch (error) {
+        console.log("ERROR TO GETING THE COMPANY: ", error)
+        return res.status(500).json({
+         message: "Internal server error",
+         success: false,
+      });
     }
 }
