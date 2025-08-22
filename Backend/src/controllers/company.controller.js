@@ -1,8 +1,10 @@
-import {Company} from "../models/company.model.js";
+import { Company } from "../models/company.model.js";
 
 export const registerCompany = async (req, res) => {
    try {
       const { companyName } = req.body;
+      // console.log(companyName);
+
       if (!companyName) {
          return res.status(400).json({
             message: "Company name is already exists",
@@ -11,7 +13,10 @@ export const registerCompany = async (req, res) => {
       }
 
       let company = await Company.findOne({ companyName });
-      if (!company) {
+
+      // console.log(company);
+
+      if (company) {
          return res.status(400).json({
             message: "You cannot register the same company",
             success: false,
@@ -22,6 +27,8 @@ export const registerCompany = async (req, res) => {
          name: companyName,
          userId: req.id,
       });
+
+      // console.log(company, "Company register Successfully");
 
       return res.status(201).json({
          message: "Company register Successfully",
@@ -41,6 +48,8 @@ export const getCompany = async (req, res) => {
    try {
       const userId = req.id;
       const companies = await Company.find({ userId });
+      console.log(companies);
+
       if (!companies) {
          return res.status(404).json({
             message: "Cannot find any company",
