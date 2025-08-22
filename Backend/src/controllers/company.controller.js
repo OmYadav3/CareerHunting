@@ -74,6 +74,7 @@ export const getCompany = async (req, res) => {
 export const getCompanyById = async (req, res) => {
    try {
       const companyId = req.params.id;
+      console.log(companyId )
       if (!companyId) {
          return res.status(400).json({
             message: "Cannot found the companyId",
@@ -81,18 +82,18 @@ export const getCompanyById = async (req, res) => {
          });
       }
 
-      const company = await Company.findById({ companyId });
-      if (company) {
+      const company = await Company.findById( companyId );
+      if (!company) {
          return res.status(404).json({
             message: "Cannot found the Company by Id ",
          });
       }
 
       return res.status(200).json({
-         message: "Companyu found Successfully by Id ",
          company,
          success: true,
       });
+
    } catch (error) {
       console.log("ERROR TO GETING THE COMPANY BY ID: ", error);
       return res.status(500).json({
