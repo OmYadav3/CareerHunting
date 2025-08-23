@@ -1,12 +1,15 @@
-import { Job } from "../models/job.model";
+import { Job } from "../models/job.model.js";
 
 /* =========FOR ADMIN ============ */
+
 export const postJob = async (req, res) => {
    try {
+      console.log("req.body >>>", req.body);
+
       const {
          title,
          description,
-         requirments,
+         requirements, 
          salary,
          location,
          jobType,
@@ -15,12 +18,12 @@ export const postJob = async (req, res) => {
          companyId,
       } = req.body;
 
-      const userId = req.id;
+      const userId = req.id; 
 
       if (
          !title ||
          !description ||
-         !requirments ||
+         !requirements ||
          !salary ||
          !location ||
          !jobType ||
@@ -29,7 +32,14 @@ export const postJob = async (req, res) => {
          !companyId
       ) {
          return res.status(400).json({
-            message: "Something is mising in required fileds",
+            message: "Something is missing in required fields",
+            success: false,
+         });
+      }
+
+      if (isNaN(Number(salary))) {
+         return res.status(400).json({
+            message: "Salary must be a valid number",
             success: false,
          });
       }
@@ -37,16 +47,17 @@ export const postJob = async (req, res) => {
       const job = await Job.create({
          title,
          description,
-         requirments: requirments.split(","),
+         requirements: requirements.split(","), 
          salary: Number(salary),
          location,
          jobType,
          experienceLevel: experience,
          position,
-         comapmny: companyId,
+         company: companyId,
          created_by: userId,
       });
-      console.log(job);
+
+      console.log("Job created >>>", job);
 
       return res.status(201).json({
          message: "New Job created successfully",
@@ -54,7 +65,7 @@ export const postJob = async (req, res) => {
          success: true,
       });
    } catch (error) {
-      console.log("ERROR TO GETING POST THE JOB: ", error);
+      console.error("ERROR POSTING JOB: ", error);
       return res.status(500).json({
          message: "Internal server error",
          success: false,

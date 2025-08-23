@@ -1,12 +1,24 @@
 import express from "express";
 import { isAuthenticated } from "../middlewares/isAuthenticated.js";
-import { getAdminJobs, getAllJobs, getJobById, postJob } from "../controllers/jobs.controller.js";
+import { 
+  getAdminJobs, 
+  getAllJobs, 
+  getJobById, 
+  postJob 
+} from "../controllers/job.controller.js";
 
 const router = express.Router();
 
-router.route("/post").post(isAuthenticated, postJob);
-router.route("/all").get(isAuthenticated, getAllJobs);
-router.route("/get/:id").post(isAuthenticated, getJobById);
-router.route("/getadminjobs/:id").post(isAuthenticated, getAdminJobs);
+// Create a new job
+router.post("/post", isAuthenticated, postJob);
+
+// Get all jobs (public or authenticated based on your needs)
+router.get("/all", getAllJobs); 
+
+// Get job by ID
+router.get("/get/:id", getJobById);
+
+// Get jobs posted by a specific admin
+router.get("/getadminjob/:id", isAuthenticated, getAdminJobs);
 
 export default router;
