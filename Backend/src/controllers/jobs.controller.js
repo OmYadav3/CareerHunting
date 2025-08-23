@@ -77,3 +77,34 @@ export const getAllJobs = async (req, res) => {
     }
 }
 
+export const getJobById = async (req, res) => {
+    try {
+         const jobId = req.params.id;
+         if (!jobId) {
+            return res.status(404).json({
+                message: 'Cannot found the JobId',
+                success:false
+            })
+         }  
+
+         const job = await Job.findById(jobId)
+         if (!job) {
+            return res.status(404).json({
+                message: 'Cannot found the Job by Id',
+                success:false
+            })
+         }
+        
+         return res.status(200).json({
+                job,
+                success:true
+            })
+
+    } catch (error) {
+         console.log("ERROR TO GETING THE JOB BY ID: ", error);
+      return res.status(500).json({
+         message: "Internal server error",
+         success: false,
+      });
+    }
+}
