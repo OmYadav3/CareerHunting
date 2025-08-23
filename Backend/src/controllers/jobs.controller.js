@@ -42,3 +42,38 @@ export const postJob = async(req, res) => {
 
     }
 }
+
+export const getAllJobs = async (req, res) => {
+    try {
+        const keyword = req.query.keyword || "";
+        const query = {
+            $or:[
+                {title:{$regex:keyword, $options:"i"}},
+                {description:{$regex:keyword, $options:"i"}}
+            ]
+        }
+
+        const jobs = await Job.find(query);
+        if (!jobs) {
+            return res.status(404).json({
+                message:'Jobs not found',
+                success:false
+            })
+        }
+
+        return res.status(200).json({
+            jobs,
+            success:true
+        })
+
+
+    } catch (error) {
+         console.log("ERROR TO GETING ALL THE JOBS: ", error);
+      return res.status(500).json({
+         message: "Internal server error",
+         success: false,
+      });
+        
+    }
+}
+
