@@ -22,7 +22,6 @@ import jobRoute from './routes/job.route.js'
 
 
 
-
 /* ============ROUTES DECLARATIONS============== */
 app.use('/api/v1/user', userRoute)
 app.use('/api/v1/company', companyRoute)
