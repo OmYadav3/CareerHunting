@@ -164,6 +164,7 @@ export const updateStatus = async (req, res) => {
    try {
       const { status } = req.body;
       const applicationId = req.params.id;
+      
       if (!status) {
          return res.status(404).json({
             message: "status is required",
