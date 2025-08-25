@@ -5,6 +5,7 @@ export const applyJob = async (req, res) => {
    try {
       const userId = req.id;
       const jobId = req.params.id;
+
       if (!jobId) {
          return res.status(404).json({
             message: "Job id not found",
@@ -38,14 +39,18 @@ export const applyJob = async (req, res) => {
          job: jobId,
          applicant: userId,
       });
+
       job.application.push(newApplication._id);
       await job.save();
+
+      console.log("New application === >> ", newApplication)
 
       return res.status(200).json({
          message: "Job apply successfully",
          newApplication,
          success: true,
       });
+
    } catch (error) {
       console.log("ERROR FOR APPLY IN JOB: ", error);
       return res.status(500).json({
@@ -154,7 +159,6 @@ export const getApplicants = async (req, res) => {
       });
    }
 };
-
 
 export const updateStatus = async (req, res) => {
    try {
