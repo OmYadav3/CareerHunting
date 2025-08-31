@@ -6,6 +6,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const user = false;
@@ -26,8 +27,14 @@ const Navbar = () => {
 
                     {!user ? (
                         <div className="flex items-center gap-2">
-                            <Button variant="outline">Login</Button>
-                            <Button className="bg-[#6a37c4] hover:bg-[#5318b7]">Signin</Button>
+                            <Link to={"/login"}>
+                                <Button variant="outline" className='cursor-pointer'>Login</Button>
+                            </Link>
+                            <Link to={"/signup"}>
+                                <Button className="bg-[#6a37c4] hover:bg-[#5318b7] cursor-pointer">
+                                    Signin
+                                </Button>
+                            </Link>
                         </div>
                     ) : (
                         <Popover>
