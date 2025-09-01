@@ -4,32 +4,93 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useCallback } from "react";
 
 const Signup = () => {
+    const [input, setInput] = useState({
+        fullname: "",
+        email: "",
+        phoneNumber: "",
+        password: "",
+        role: "",
+        file: "",
+    });
+
+    // const changeEventHandler = useCallback((e) => {
+    //     setInput({ ...input, [e.target.name]: e.target.value });
+    // }, []);
+
+    // const changeFileHandler = useCallback((e) => {
+    //     setInput({ ...input, file: e.target.files?.[0] });
+    // }, []);
+
+    const changeEventHandler = useCallback((e) => {
+        const { name, value } = e.target;
+        setInput((prev) => ({ ...prev, [name]: value }));
+    }, []);
+
+    const changeFileHandler = useCallback((e) => {
+        const file = e.target.files?.[0];
+        setInput((prev) => ({ ...prev, file }));
+    }, []);
+
+    const submitHandler = useCallback(
+        async (e) => {
+            e.preventDefault();
+            console.log(input);
+        },
+        [input]
+    );
+
     return (
         <div>
             <Navbar />
             <div className="flex items-center justify-center max-w-7xl mx-auto">
                 <form
-                    action=""
+                    onSubmit={submitHandler}
                     className="w-1/2 border border-gray-200 rounded-md p-4 my-10"
                 >
                     <h1 className="font-bold text-4xl mb-5">Sign up</h1>
                     <div className="my-6">
                         <Label className="mb-0.5">Full Name</Label>
-                        <Input type="text" placeholder="Eg. OmYadav" />
+                        <Input
+                            type="text"
+                            value={input.fullname}
+                            name="fullname"
+                            onChange={changeEventHandler}
+                            placeholder="Eg. OmYadav"
+                        />
                     </div>
                     <div className="my-6">
                         <Label className="mb-0.5">Email</Label>
-                        <Input type="email" placeholder="example@example.com" />
+                        <Input
+                            type="email"
+                            placeholder="example@example.com"
+                            value={input.email}
+                            name="email"
+                            onChange={changeEventHandler}
+                        />
                     </div>
                     <div className="my-6">
                         <Label className="mb-0.5">Phone</Label>
-                        <Input type="number" placeholder="98XXXXXXXX" />
+                        <Input
+                            type="text"
+                            placeholder="98XXXXXXXX"
+                            value={input.phoneNumber}
+                            name="phoneNumber"
+                            onChange={changeEventHandler}
+                        />
                     </div>
                     <div className="">
                         <Label className="mb-0.5">Password</Label>
-                        <Input type="password" placeholder="password" />
+                        <Input
+                            type="password"
+                            placeholder="password"
+                            value={input.password}
+                            name="password"
+                            onChange={changeEventHandler}
+                        />
                     </div>
                     <div className="flex items-center justify-between">
                         <RadioGroup className="flex items-center gap-5 my-4">
@@ -38,6 +99,8 @@ const Signup = () => {
                                     type="radio"
                                     name="role"
                                     value="student"
+                                    checked={input.role === "student"}
+                                    onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
                                 <Label htmlFor="r1">Student</Label>
@@ -47,6 +110,8 @@ const Signup = () => {
                                     type="radio"
                                     name="role"
                                     value="recruiter"
+                                    checked={input.role === "recruiter"}
+                                    onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
                                 <Label htmlFor="r2">Recruiter</Label>
@@ -58,17 +123,23 @@ const Signup = () => {
                             <Input
                                 accept="image/*"
                                 type="file"
+                                onChange={changeFileHandler}
                                 className="cursor-pointer"
                             />
                         </div>
                     </div>
                     <Button
-                    type='submit'
-                    className='w-full my-2 cursor-pointer'
+                        type="submit"
+                        className="w-full my-2 cursor-pointer"
                     >
-                      Signup
+                        Signup
                     </Button>
-                    <span className="text-sm">Already have an account? <Link to="/login" className="text-blue-600">Login</Link></span>
+                    <span className="text-sm">
+                        Already have an account?{" "}
+                        <Link to="/login" className="text-blue-600">
+                            Login
+                        </Link>
+                    </span>
                 </form>
             </div>
         </div>
@@ -76,4 +147,3 @@ const Signup = () => {
 };
 
 export default Signup;
-Signup;
