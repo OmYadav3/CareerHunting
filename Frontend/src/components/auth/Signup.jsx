@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useCallback } from "react";
-import { USER_API_ENDPOINT } from "../../utils/constant";
+import { USER_API_ENDPOINT } from "../../utils/constant.js";
 import axios from 'axios'
 
 const Signup = () => {
