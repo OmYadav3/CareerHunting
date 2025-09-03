@@ -3,18 +3,22 @@ import { RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { USER_API_ENDPOINT } from "../../utils/constant.js";
-
+import { toast } from "sonner";
 
 const Login = () => {
+
     const [input, setInput] = useState({
         email: "",
         password: "",
         role: "",
     });
+
+    const navigate = useNavigate();
+
 
     const changeEventHandler = useCallback((e) => {
         const { name, value } = e.target;
@@ -22,36 +26,33 @@ const Login = () => {
     }, []);
 
     const submitHandler = useCallback(
-          async (e) => {
-              e.preventDefault();
-              console.log(input);
-             
-  
-              try {
-                  const res = await axios.post(
-                      `${USER_API_ENDPOINT}/login`,
-                      input,
-                      {
-                          headers: {
-                              "Content-Type": "application/json",
-                          },
-                          withCredentials: true,
-                      }
-                  );
-                  if (res.data.success) {
-                      navigate("/");
-                      toast.success(res.data.message);
-                  }
-              } catch (error) {
-                  console.log(
-                      "ERROR OCCURE WHILE LOGIN THE USER ON FRONTEND SIDE",
-                      error
-                  );
-              }
-          },
-          [input]
-      );
-  
+        async (e) => {
+            e.preventDefault();
+            console.log(input);
+
+            try {
+                const res = await axios.post(
+                    `${USER_API_ENDPOINT}/login`,
+                    input,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        withCredentials: true,
+                    }
+                );
+                if (res.data.success) {
+                    navigate("/");
+                    toast.success(res.data.message);
+                }
+            } catch (error) {
+                console.log(error);
+                toast.success(error.response.data.message);
+            }
+        },
+        [input]
+    );
+
     return (
         <div>
             <Navbar />

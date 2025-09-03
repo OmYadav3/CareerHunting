@@ -7,7 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useCallback } from "react";
 import { USER_API_ENDPOINT } from "../../utils/constant.js";
-import axios from 'axios'
+import axios from "axios";
+import { toast } from "sonner";
 
 const Signup = () => {
     const [input, setInput] = useState({
@@ -16,7 +17,7 @@ const Signup = () => {
         phoneNumber: "",
         password: "",
         role: "",
-        // file: "",
+        file: "",
     });
 
     const navigate = useNavigate();
@@ -35,38 +36,38 @@ const Signup = () => {
         async (e) => {
             e.preventDefault();
             console.log(input);
+
             const formData = new FormData();
             formData.append("fullname", input.fullname);
             formData.append("email", input.email);
             formData.append("phoneNumber", input.phoneNumber);
             formData.append("password", input.password);
             formData.append("role", input.role);
-            // if (file) {
-            //     formData.append("file", input.file);
-            // }else{
-            //     console.log("file is not define")
-            // }
+
+            if (input.file) {
+                formData.append("file", input.file);
+            } else {
+                console.log("file is not defined");
+            }
 
             try {
                 const res = await axios.post(
                     `${USER_API_ENDPOINT}/register`,
-                    FormData,
+                    formData,
+
                     {
-                        headers: {
-                            "Content-Type": "multipart/form-Data",
-                        },
+                        headers: { "Content-Type": "multipart/form-data" },
                         withCredentials: true,
                     }
                 );
+
                 if (res.data.success) {
                     navigate("/login");
                     toast.success(res.data.message);
                 }
             } catch (error) {
-                console.log(
-                    "ERROR OCCURE WHILE REGISTER THE USER ON FRONTEND SIDE",
-                    error
-                );
+                console.log(error);
+                toast.success(error.response.data.message);
             }
         },
         [input]
