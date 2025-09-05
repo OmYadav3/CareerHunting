@@ -32,7 +32,7 @@ const Navbar = () => {
                             </Link>
                             <Link to={"/signup"}>
                                 <Button className="bg-[#6a37c4] hover:bg-[#5318b7] cursor-pointer">
-                                    Signin
+                                    Signup
                                 </Button>
                             </Link>
                         </div>

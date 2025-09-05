@@ -9,6 +9,9 @@ import { useCallback } from "react";
 import { USER_API_ENDPOINT } from "../../utils/constant.js";
 import axios from "axios";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setloading } from "../../redux/authSlice.js";
+import { Loader2 } from "lucide-react";
 
 const Signup = () => {
     const [input, setInput] = useState({
@@ -20,7 +23,9 @@ const Signup = () => {
         file: "",
     });
 
+    const { loading } = useSelector(store => store.auth);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const changeEventHandler = useCallback((e) => {
         const { name, value } = e.target;
@@ -51,6 +56,7 @@ const Signup = () => {
             }
 
             try {
+                dispatch(setloading(true))
                 const res = await axios.post(
                     `${USER_API_ENDPOINT}/register`,
                     formData,
@@ -68,6 +74,8 @@ const Signup = () => {
             } catch (error) {
                 console.log(error);
                 toast.success(error.response.data.message);
+            }finally{
+                dispatch(setloading(false))
             }
         },
         [input]
@@ -158,12 +166,19 @@ const Signup = () => {
                             />
                         </div>
                     </div>
-                    <Button
-                        type="submit"
-                        className="w-full my-2 cursor-pointer"
-                    >
-                        Signup
-                    </Button>
+                     {loading ? (
+                        <Button className="w-full my-2 ">
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Please wait...
+                        </Button>
+                    ) : (
+                        <Button
+                            type="submit"
+                            className="w-full my-2 cursor-pointer"
+                        >
+                            Signup
+                        </Button>
+                    )}
                     <span className="text-sm">
                         Already have an account?{" "}
                         <Link to="/login" className="text-blue-600">

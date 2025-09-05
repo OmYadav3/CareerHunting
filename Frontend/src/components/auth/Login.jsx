@@ -3,22 +3,25 @@ import { RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link,  useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
 import axios from "axios";
 import { USER_API_ENDPOINT } from "../../utils/constant.js";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setloading } from "../../redux/authSlice.js";
+import { Loader2 } from "lucide-react";
 
 const Login = () => {
-
     const [input, setInput] = useState({
         email: "",
         password: "",
         role: "",
     });
 
+    const { loading } = useSelector(store => store.auth);
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
 
     const changeEventHandler = useCallback((e) => {
         const { name, value } = e.target;
@@ -31,6 +34,7 @@ const Login = () => {
             console.log(input);
 
             try {
+                dispatch(setloading(true));
                 const res = await axios.post(
                     `${USER_API_ENDPOINT}/login`,
                     input,
@@ -48,6 +52,8 @@ const Login = () => {
             } catch (error) {
                 console.log(error);
                 toast.success(error.response.data.message);
+            } finally {
+                dispatch(setloading(false));
             }
         },
         [input]
@@ -108,12 +114,21 @@ const Login = () => {
                             </div>
                         </RadioGroup>
                     </div>
-                    <Button
-                        type="submit"
-                        className="w-full my-2 cursor-pointer"
-                    >
-                        Login
-                    </Button>
+                   
+                    {loading ? (
+                        <Button className="w-full my-2 ">
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Please wait...
+                        </Button>
+                    ) : (
+                        <Button
+                            type="submit"
+                            className="w-full my-2 cursor-pointer"
+                        >
+                            Login
+                        </Button>
+                    )}
+
                     <span className="text-sm">
                         Don't have an account?{" "}
                         <Link to="/signup" className="text-blue-600">
