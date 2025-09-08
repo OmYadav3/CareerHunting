@@ -12,7 +12,7 @@ const Jobs = () => {
                 <div className="flex gap-4">
                     {/*=====FilterCards====== */}
                     <div className="w-20%">
-                        <FilterCards />
+                        <FilterCards/>
                     </div>
 
                     {/*=====JOB CARD====== */}
