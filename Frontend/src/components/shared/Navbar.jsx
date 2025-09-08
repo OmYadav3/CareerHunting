@@ -78,7 +78,8 @@ const Navbar = () => {
                                     <div className="flex w-fit items-center gap-2 cursor-pointer ">
                                         <User2Icon />
                                         <Button variant="link">
-                                            View Profile
+                                            <Link to={'/profile'}>View Profile</Link>
+                                            
                                         </Button>
                                     </div>
                                     <div className="flex w-fit items-center gap-2 cursor-pointer">
