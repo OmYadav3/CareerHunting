@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./shared/Navbar";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -8,9 +8,12 @@ import { Contact, Mail, Pen } from "lucide-react";
 import AppliedJobTable from "./AppliedJobTable";
 
 const skillsArray = ["HTML", "CSS", "JAVASCRIPT", "REACT.JS"];
+const isResume = true;
 
 const Profile = () => {
-    const isResume = true;
+
+const [open, setOpen] = useState(false)
+
     return (
         <div>
             <Navbar />
@@ -32,7 +35,7 @@ const Profile = () => {
                             </p>
                         </div>
                     </div>
-                    <Button className="text-right " variant="outline">
+                    <Button onClick={() =>setOpen(true)}  className="text-right " variant="outline" >
                         <Pen />
                     </Button>
                 </div>
@@ -77,7 +80,6 @@ const Profile = () => {
                     <div className="max-w-4xl mx-auto bg-white rounded-2xl">
                         <h1 className="font-bold text-2xl my-5">Applied Jobs</h1>
                         <AppliedJobTable/>
-
                     </div>
         </div>
     );
