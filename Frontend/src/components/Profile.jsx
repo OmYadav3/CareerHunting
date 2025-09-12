@@ -6,13 +6,13 @@ import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 import { Contact, Mail, Pen } from "lucide-react";
 import AppliedJobTable from "./AppliedJobTable";
+import UpdateProfileDialog from "./UpdateProfileDialog ";
 
 const skillsArray = ["HTML", "CSS", "JAVASCRIPT", "REACT.JS"];
 const isResume = true;
 
 const Profile = () => {
-
-const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
 
     return (
         <div>
@@ -35,7 +35,11 @@ const [open, setOpen] = useState(false)
                             </p>
                         </div>
                     </div>
-                    <Button onClick={() =>setOpen(true)}  className="text-right " variant="outline" >
+                    <Button
+                        onClick={() => setOpen(true)}
+                        className="text-right "
+                        variant="outline"
+                    >
                         <Pen />
                     </Button>
                 </div>
@@ -67,20 +71,23 @@ const [open, setOpen] = useState(false)
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label className="text-md font-bold">Resume</Label>
                     {isResume ? (
-                        <a target="blank" href="https//googledrive.com/@omydv3" className="text-blue-600 w-full hover:underline cursor-pointer">
+                        <a
+                            target="blank"
+                            href="https//googledrive.com/@omydv3"
+                            className="text-blue-600 w-full hover:underline cursor-pointer"
+                        >
                             OmYadavResume
                         </a>
                     ) : (
                         <span>NA</span>
                     )}
                 </div>
-
-
             </div>
-                    <div className="max-w-4xl mx-auto bg-white rounded-2xl">
-                        <h1 className="font-bold text-2xl my-5">Applied Jobs</h1>
-                        <AppliedJobTable/>
-                    </div>
+            <div className="max-w-4xl mx-auto bg-white rounded-2xl">
+                <h1 className="font-bold text-2xl my-5">Applied Jobs</h1>
+                <AppliedJobTable />
+            </div>
+            <UpdateProfileDialog open={open} setOpen={setOpen} />
         </div>
     );
 };
