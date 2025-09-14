@@ -165,13 +165,13 @@ export const updateProfile = async (req, res) => {
 
       /* ================ RESUME COMES LATER ===========*/
 
-      // const file = req.file;
-      // if(!file){
-      //   return res.status(400).json({
-      //       message: 'Cannot Found the file',
-      //       success: false
-      //   })
-      // }
+      const file = req.file;
+      if(!file){
+        return res.status(400).json({
+            message: 'Cannot Found the file',
+            success: false
+        })
+      }
 
       let skillsArray;
       if (skills) {
