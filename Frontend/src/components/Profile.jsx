@@ -6,7 +6,7 @@ import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 import { Contact, Mail, Pen } from "lucide-react";
 import AppliedJobTable from "./AppliedJobTable";
-import UpdateProfileDialog from "./UpdateProfileDialog ";
+import UpdateProfileDialog from "./UpdateProfileDialog";
 
 const skillsArray = ["HTML", "CSS", "JAVASCRIPT", "REACT.JS"];
 const isResume = true;
