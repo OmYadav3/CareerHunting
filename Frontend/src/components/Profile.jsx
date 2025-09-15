@@ -7,12 +7,15 @@ import { Label } from "./ui/label";
 import { Contact, Mail, Pen } from "lucide-react";
 import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfileDialog from "./UpdateProfileDialog";
+import { useDispatch, useSelector } from "react-redux";
 
-const skillsArray = ["HTML", "CSS", "JAVASCRIPT", "REACT.JS"];
+// const skillsArray = ["HTML", "CSS", "JAVASCRIPT", "REACT.JS"];
+
 const isResume = true;
 
 const Profile = () => {
     const [open, setOpen] = useState(false);
+    const { user } = useSelector(store => store.auth)
 
     return (
         <div>
@@ -27,11 +30,9 @@ const Profile = () => {
                             />
                         </Avatar>
                         <div>
-                            <h1 className="font-medium text-xl">Full Name</h1>
+                            <h1 className="font-medium text-xl">{user?.fullname}</h1>
                             <p>
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Molestias ex totam iure odit
-                                harum.
+                             {user?.profile?.bio}
                             </p>
                         </div>
                     </div>
@@ -47,19 +48,19 @@ const Profile = () => {
                 <div className="my-5">
                     <div className="flex items-center gap-3 my-2">
                         <Mail />
-                        <span>omyadav@gmail.com</span>
+                        <span>{user?.email}</span>
                     </div>
                     <div className="flex items-center gap-3 my-2">
                         <Contact />
-                        <span>9825269698</span>
+                        <span>{user?.phoneNumber}</span>
                     </div>
                 </div>
 
                 <div className="my-5">
                     <h1>Skills</h1>
                     <div className="flex items-center gap-2">
-                        {skillsArray.length !== 0 ? (
-                            skillsArray.map((item, index) => (
+                        {user?.profile?.skills.length !== 0 ? (
+                            user?.profile?.skills.map((item, index) => (
                                 <Badge key={index}>{item}</Badge>
                             ))
                         ) : (
