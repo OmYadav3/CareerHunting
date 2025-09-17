@@ -1,11 +1,13 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../services/dataUri.js";
+import cloudinary from "../services/Cloudinary.js";
 
 export const register = async (req, res) => {
    try {
       const { fullname, email, password, phoneNumber, role } = req.body;
-      console.log("req.body: ", req.body); 
+      console.log("req.body: ", req.body);
 
       if (!fullname) {
          return res.status(400).json({
@@ -133,7 +135,6 @@ export const login = async (req, res) => {
             user,
             success: true,
          });
-         
    } catch (error) {
       console.error("Error in login:", error);
       return res.status(500).json({
@@ -163,15 +164,23 @@ export const updateProfile = async (req, res) => {
       const { fullname, email, phoneNumber, bio, skills } = req.body;
       console.log(req.body, "FHIR SE NAHI MILI KYA BODY");
 
-      /* ================ RESUME COMES LATER ===========*/
-
       const file = req.file;
-      if(!file){
-        return res.status(400).json({
-            message: 'Cannot Found the file',
-            success: false
-        })
+
+
+      // Problem ---- when i update the other field then it mustbe also upload file if it's not then do not update the other field 
+      
+      if (!file) {
+         return res.status(400).json({
+            message: "Cannot Found the file",
+            success: false,
+         });
       }
+      /* ================ CLOUDINARY TO UPLOAD RESUME  ===========*/
+
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      // console.log(fileUri)✅
+      // console.log(cloudResponse)✅
 
       let skillsArray;
       if (skills) {
@@ -195,7 +204,15 @@ export const updateProfile = async (req, res) => {
       if (bio) user.profile.bio = bio;
       if (skills) user.profile.skills = skillsArray;
 
-      /* ================ RESUME COMES LATER ===========*/
+      /* ================ RESUME COMES  ===========*/
+
+      if (cloudResponse) {
+         user.profile.resume = cloudResponse.secure_url; // save the cloudinary url or live link to see the resume
+         user.profile.resumeOriginalName = file.originalname; // save the original file name
+
+         // console.log(user.profile.resume)✅
+         // console.log(user.profile.resumeOriginalName, "original file name ")✅
+      }
 
       await user.save();
 

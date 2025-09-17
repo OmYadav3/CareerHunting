@@ -7,10 +7,8 @@ import { Label } from "./ui/label";
 import { Contact, Mail, Pen } from "lucide-react";
 import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfileDialog from "./UpdateProfileDialog";
-import { useDispatch, useSelector } from "react-redux";
-
-// const skillsArray = ["HTML", "CSS", "JAVASCRIPT", "REACT.JS"];
-
+import { useSelector } from "react-redux";
+ 
 const isResume = true;
 
 const Profile = () => {
@@ -74,10 +72,10 @@ const Profile = () => {
                     {isResume ? (
                         <a
                             target="blank"
-                            href="https//googledrive.com/@omydv3"
+                            href={user?.profile?.resume}
                             className="text-blue-600 w-full hover:underline cursor-pointer"
                         >
-                            OmYadavResume
+                            {user?.profile?.resumeOriginalName}
                         </a>
                     ) : (
                         <span>NA</span>
