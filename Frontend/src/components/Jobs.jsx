@@ -21,7 +21,7 @@ const { allJobs } = useSelector(store => store.job)
                     </div>
 
                     {/*=====JOB CARD====== */}
-                    {allJobs.length <= 0 ? (
+                    {allJobs?.length <= 0 ? (
                         <span>Job not found </span>
                     ) : (
                         <div className="flex-1 h-[88vh] overflow-y-auto pb-5">

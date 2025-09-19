@@ -6,15 +6,19 @@ import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from "../utils/constant"
 import { setSingleJob } from "../redux/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { toast } from "sonner";
+// import { setSingleJob } from '../redux/jobSlice'
+
+
 
 const JobDescription = () => {
+    const { singleJob } = useSelector(store => store.job);
+    const { user } = useSelector(store => store.auth);
 
     const isApplied = singleJob?.application?.some(application => application.applicant === user?._id) || false;
 
     const params = useParams();
     const jobId = params.id;
-    const { singleJob } = useSelector(store => store.job);
-    const { user } = useSelector(store => store.auth);
     const dispatch = useDispatch();
 
     const applyJobHandler = async() => {
@@ -38,7 +42,7 @@ const JobDescription = () => {
                     withCredentials: true,
                 });
                 if (res.data.success) {
-                    dispatch(setSingleJob(res.data.job));
+                    dispatch(setSingleJob(res.data.jobs));
                 }
             } catch (error) {
                 console.log(error);
@@ -102,7 +106,7 @@ const JobDescription = () => {
                 <h1 className="font-bold my-1">
                     Location :{" "}
                     <span className="pl-4 font-normal text-gray-800">
-                        {singleJob?.title}
+                        {singleJob?.location}
                     </span>
                 </h1>
                 <h1 className="font-bold my-1">
