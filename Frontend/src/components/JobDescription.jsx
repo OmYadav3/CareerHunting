@@ -7,13 +7,12 @@ import { setSingleJob } from "../redux/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
-// import { setSingleJob } from '../redux/jobSlice'
-
 
 
 const JobDescription = () => {
-    const { singleJob } = useSelector(store => store.job);
     const { user } = useSelector(store => store.auth);
+    const { singleJob } = useSelector(store => store.job);
+
 
     const isApplied = singleJob?.application?.some(application => application.applicant === user?._id) || false;
 
@@ -23,7 +22,8 @@ const JobDescription = () => {
 
     const applyJobHandler = async() => {
         try {
-            const res = await axios(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {withCredentials:true});
+            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {withCredentials:true});
+            console.log(res)
             if(res.data.success){
                 toast.success(res.data.message);
             }
@@ -41,8 +41,9 @@ const JobDescription = () => {
                 const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, {
                     withCredentials: true,
                 });
+                // console.log(res, "Fetching Single Job Data ")
                 if (res.data.success) {
-                    dispatch(setSingleJob(res.data.jobs));
+                    dispatch(setSingleJob(res.data.job));
                 }
             } catch (error) {
                 console.log(error);

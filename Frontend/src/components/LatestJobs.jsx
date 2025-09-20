@@ -5,7 +5,7 @@ import LatestJobCard from "./LatestJobCard";
 
 const LatestJobs = () => {
     const { allJobs } = useSelector(store => store.job)
-    console.log(allJobs, "All jobs")
+    // console.log(allJobs, "All jobs")
 
     return (
         <div className="max-w-7xl mx-auto my-20">
