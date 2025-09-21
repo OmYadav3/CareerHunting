@@ -1,49 +1,68 @@
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { useParams } from 'react-router-dom'
-import { useEffect } from "react";
-import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from "../utils/constant";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+    APPLICATION_API_END_POINT,
+    JOB_API_END_POINT,
+} from "../utils/constant";
 import { setSingleJob } from "../redux/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
 
-
 const JobDescription = () => {
-    const { user } = useSelector(store => store.auth);
-    const { singleJob } = useSelector(store => store.job);
+    const { user } = useSelector((store) => store.auth);
+    const { singleJob } = useSelector((store) => store.job);
 
-
-    const isApplied = singleJob?.application?.some(application => application.applicant === user?._id) || false;
+    const isIntiallyApplied =
+        singleJob?.application?.some(
+            (application) => application.applicant === user?._id
+        ) || false;
+    const [isApplied, setIsApplied] = useState(isIntiallyApplied);
 
     const params = useParams();
     const jobId = params.id;
     const dispatch = useDispatch();
 
-    const applyJobHandler = async() => {
+    const applyJobHandler = async () => {
         try {
-            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {withCredentials:true});
-            console.log(res)
-            if(res.data.success){
+            const res = await axios.get(
+                `${APPLICATION_API_END_POINT}/apply/${jobId}`,
+                { withCredentials: true }
+            );
+            console.log(res);
+            if (res.data.success) {
+                setIsApplied(true); // update this local state
+                const updatedSingleJob = {
+                    ...singleJob,
+                    application: [
+                        ...singleJob.application,
+                        { applicant: user?._id },
+                    ],
+                };
+                dispatch(setSingleJob(updatedSingleJob)); // help us to real time ui update
                 toast.success(res.data.message);
             }
         } catch (error) {
-         console.log(error)   
-         toast.error(error.response.data.message);
-
+            console.log(error);
+            toast.error(error.response.data.message);
         }
-    }
+    };
 
-
-      useEffect(() => {
+    useEffect(() => {
         const fetchSingleJobs = async () => {
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, {
-                    withCredentials: true,
-                });
+                const res = await axios.get(
+                    `${JOB_API_END_POINT}/get/${jobId}`,
+                    {
+                        withCredentials: true,
+                    }
+                );
                 // console.log(res, "Fetching Single Job Data ")
                 if (res.data.success) {
                     dispatch(setSingleJob(res.data.job));
+                    setIsApplied(res.data.job.application.some(application => application.applicant === user?._id))  // ensure the state is in syc with fetch 
                 }
             } catch (error) {
                 console.log(error);
@@ -53,8 +72,6 @@ const JobDescription = () => {
         fetchSingleJobs();
     }, [jobId, dispatch, user?._id]);
 
-
- 
     return (
         <div className="max-w-7xl mx-auto my-10 rounded-md ">
             <div className="flex items-center justify-between">
@@ -83,7 +100,7 @@ const JobDescription = () => {
                 </div>
 
                 <Button
-                    onClick={isApplied ? null: applyJobHandler}
+                    onClick={isApplied ? null : applyJobHandler}
                     disabled={isApplied}
                     className={`rounded-lg ${
                         isApplied
@@ -118,17 +135,21 @@ const JobDescription = () => {
                 </h1>
                 <h1 className="font-bold my-1">
                     Experience :{" "}
-                    <span className="pl-4 font-normal text-gray-800">{singleJob?.experience} yrs</span>
+                    <span className="pl-4 font-normal text-gray-800">
+                        {singleJob?.experience} yrs
+                    </span>
                 </h1>
                 <h1 className="font-bold my-1">
                     Salary :{" "}
                     <span className="pl-4 font-normal text-gray-800">
-                        {singleJob?.salary } LPA
+                        {singleJob?.salary} LPA
                     </span>
                 </h1>
                 <h1 className="font-bold my-1">
                     Total Applicant :{" "}
-                    <span className="pl-4 font-normal text-gray-800">{singleJob?.application?.length}</span>
+                    <span className="pl-4 font-normal text-gray-800">
+                        {singleJob?.application?.length}
+                    </span>
                 </h1>
                 <h1 className="font-bold my-1">
                     Posted Date :{" "}
