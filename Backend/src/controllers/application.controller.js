@@ -1,5 +1,5 @@
 import { Application } from "../models/application.model.js";
-import { Job } from "../models/Job.model.js";
+import { Job } from "../models/job.model.js";
 
 export const applyJob = async (req, res) => {
    try {
