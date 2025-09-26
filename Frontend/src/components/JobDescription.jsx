@@ -42,6 +42,7 @@ const JobDescription = () => {
                     ],
                 };
                 dispatch(setSingleJob(updatedSingleJob)); // help us to real time ui update
+                console.log(updatedSingleJob)
                 toast.success(res.data.message);
             }
         } catch (error) {
@@ -49,6 +50,7 @@ const JobDescription = () => {
             toast.error(error.response.data.message);
         }
     };
+
 
     useEffect(() => {
         const fetchSingleJobs = async () => {
