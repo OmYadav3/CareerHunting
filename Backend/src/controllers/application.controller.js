@@ -19,6 +19,8 @@ export const applyJob = async (req, res) => {
          job: jobId,
          applicant: userId,
       });
+      console.log(existingApplication, "EXISTING ONE")
+
       if (existingApplication) {
          return res.status(400).json({
             message: "You have already applied for this job ",
@@ -42,7 +44,7 @@ export const applyJob = async (req, res) => {
       });
 
       // job.application.push(newApplication._id);
-      job.application.push(newApplication._id)
+      job.applications.push(newApplication._id)
       await job.save();
 
       console.log("New application === >> ", newApplication)
