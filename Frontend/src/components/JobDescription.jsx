@@ -16,8 +16,8 @@ const JobDescription = () => {
     const { singleJob } = useSelector((store) => store.job);
 
     const isIntiallyApplied =
-        singleJob?.application?.some(
-            (application) => application.applicant === user?._id
+        singleJob?.applications?.some(
+            application => application.applicant === user?._id
         ) || false;
     const [isApplied, setIsApplied] = useState(isIntiallyApplied);
 
@@ -36,8 +36,8 @@ const JobDescription = () => {
                 setIsApplied(true); // update this local state
                 const updatedSingleJob = {
                     ...singleJob,
-                    application: [
-                        ...singleJob.application,
+                    applications: [
+                        ...singleJob.applications,
                         { applicant: user?._id },
                     ],
                 };
@@ -64,7 +64,7 @@ const JobDescription = () => {
                 // console.log(res, "Fetching Single Job Data ")
                 if (res.data.success) {
                     dispatch(setSingleJob(res.data.job));
-                    setIsApplied(res.data.job.application.some(application => application.applicant === user?._id))  // ensure the state is in syc with fetch 
+                    setIsApplied(res.data.job.applications.some(application => application.applicant === user?._id))  // ensure the state is in syc with fetch 
                 }
             } catch (error) {
                 console.log(error);
