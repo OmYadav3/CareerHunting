@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from '@/redux/authSlice'
+import { setUser } from "@/redux/authSlice";
 import { toast } from "sonner";
 import axios from "axios";
 import { USER_API_ENDPOINT } from "../../utils/constant";
@@ -20,17 +20,19 @@ const Navbar = () => {
 
     const logoutHandler = async () => {
         try {
-            const res = await axios.get(`${USER_API_ENDPOINT}/logout`, { withCredentials: true });
+            const res = await axios.get(`${USER_API_ENDPOINT}/logout`, {
+                withCredentials: true,
+            });
             if (res.data.success) {
                 dispatch(setUser(null));
                 navigate("/");
-                toast.success(res.data.message)
+                toast.success(res.data.message);
             }
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message);
         }
-    }
+    };
 
     return (
         <div className="bg-white">
@@ -42,18 +44,35 @@ const Navbar = () => {
                 </div>
                 <div className="flex items-center gap-12">
                     <ul className="flex font-medium items-center gap-5">
-                        <li>
-                            {" "}
-                            <Link to={"/"}>Home</Link>
-                        </li>
-                        <li>
-                            {" "}
-                            <Link to={"/jobs"}>Jobs</Link>
-                        </li>
-                        <li>
-                            {" "}
-                            <Link to={"/Browse"}>Browse</Link>
-                        </li>
+                        {user && user.role === "recruiter" ? (
+                            <>
+                                <li>
+                                    {" "}
+                                    <Link to={"/admin/companies"}>
+                                        Companies
+                                    </Link>
+                                </li>
+                                <li>
+                                    {" "}
+                                    <Link to={"/admin/jobs"}>Jobs</Link>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li>
+                                    {" "}
+                                    <Link to={"/"}>Home</Link>
+                                </li>
+                                <li>
+                                    {" "}
+                                    <Link to={"/jobs"}>Jobs</Link>
+                                </li>
+                                <li>
+                                    {" "}
+                                    <Link to={"/Browse"}>Browse</Link>
+                                </li>
+                            </>
+                        )}
                     </ul>
 
                     {!user ? (
@@ -76,13 +95,17 @@ const Navbar = () => {
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Avatar className="cursor-pointer">
-                                    <AvatarImage src={user?.profile?.profilePhoto} />
+                                    <AvatarImage
+                                        src={user?.profile?.profilePhoto}
+                                    />
                                 </Avatar>
                             </PopoverTrigger>
                             <PopoverContent className="w-80">
                                 <div className="flex items-center gap-4 space-y-2 ">
                                     <Avatar className="cursor-pointer">
-                                        <AvatarImage src={user?.profile?.profilePhoto} />
+                                        <AvatarImage
+                                            src={user?.profile?.profilePhoto}
+                                        />
                                     </Avatar>
                                     <div>
                                         <h4 className="font-medium">
@@ -94,14 +117,17 @@ const Navbar = () => {
                                     </div>
                                 </div>
                                 <div className="flex flex-col text-gray-600 my-2">
-                                    <div className="flex w-fit items-center gap-2 cursor-pointer ">
-                                        <User2Icon />
-                                        <Button variant="link">
-                                            <Link to={"/profile"}>
-                                                View Profile
-                                            </Link>
-                                        </Button>
-                                    </div>
+                                    {user && user.role === "student" && (
+                                        <div className="flex w-fit items-center gap-2 cursor-pointer ">
+                                            <User2Icon />
+                                            <Button variant="link">
+                                                <Link to={"/profile"}>
+                                                    View Profile
+                                                </Link>
+                                            </Button>
+                                        </div>
+                                    )}
+
                                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                                         <LogOutIcon />
                                         <Button
