@@ -28,7 +28,7 @@ export const registerCompany = async (req, res) => {
          userId: req.id,
       });
 
-      // console.log(company, "Company register Successfully");
+      console.log(company, "Company register Successfully");
 
       return res.status(201).json({
          message: "Company register Successfully",
