@@ -35,6 +35,7 @@ export const registerCompany = async (req, res) => {
          company,
          success: true,
       });
+      
    } catch (error) {
       console.log("ERROR TO REGISTER: ", error);
       return res.status(500).json({
@@ -106,7 +107,7 @@ export const getCompanyById = async (req, res) => {
 export const updateCompany = async (req, res) => {
    try {
       const { name, description, website, location } = req.body;
-      // console.log(req.body)
+      console.log(req.body)
       const file = req.file;
 
       /* =============CLOUDNARY WORK HERE ============== */
