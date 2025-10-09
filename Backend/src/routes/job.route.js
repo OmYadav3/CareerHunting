@@ -19,6 +19,6 @@ router.get("/all", getAllJobs);
 router.get("/get/:id", getJobById);
 
 // Get jobs posted by a specific admin
-router.get("/getadminjob/:id", isAuthenticated, getAdminJobs);
+router.get("/getadminjob", isAuthenticated, getAdminJobs);
 
 export default router;
