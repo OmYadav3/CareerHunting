@@ -150,7 +150,7 @@ const JobDescription = () => {
                 <h1 className="font-bold my-1">
                     Total Applicant :{" "}
                     <span className="pl-4 font-normal text-gray-800">
-                        {singleJob?.application?.length}
+                        {singleJob?.applications?.length}
                     </span>
                 </h1>
                 <h1 className="font-bold my-1">
