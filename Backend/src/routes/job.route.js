@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/post", isAuthenticated, postJob);
 
 // Get all jobs (public or authenticated based on your needs)
-router.get("/get", getAllJobs); 
+router.get("/all", getAllJobs); 
 
 // Get job by ID
 router.get("/get/:id", getJobById);
