@@ -16,6 +16,10 @@ const Job = ({ job }) => {
         return Math.floor(timeDifference / (1000 * 24 * 60 * 60));
     };
 
+    
+
+    const fallbackLogo = "https://imgs.search.brave.com/VBICu3sR8ER_uhqBnoo8MWJfmePo09A5N43l60FzMTo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTE4/OTkxNzk0NC92ZWN0/b3IvaGVhcnQtbG9n/by1zaWduLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz1iR0xj/MGV3bk5wcFZ4MGxx/N3ZmMDVSZFRkeTI3/NVh4emVHcklwRUxF/clM0PQ";
+
     return (
         <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100">
             <div className="flex items-center justify-between ">
@@ -30,25 +34,26 @@ const Job = ({ job }) => {
             </div>
 
             <div className="flex items-center gap-2 my-2">
-                <Button>
-                    <Avatar>
+                <div>
+                    <Avatar className="border border-gray-100">
                         <AvatarImage
-                            src={job?.comapny?.logo || "https://imgs.search.brave.com/VBICu3sR8ER_uhqBnoo8MWJfmePo09A5N43l60FzMTo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTE4/OTkxNzk0NC92ZWN0/b3IvaGVhcnQtbG9n/by1zaWduLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz1iR0xj/MGV3bk5wcFZ4MGxx/N3ZmMDVSZFRkeTI3/NVh4emVHcklwRUxF/clM0PQ"} 
+                            src={job?.company?.logo || fallbackLogo} 
+                            // src={job?.company?.logo}
                             alt="UserProfilePic"
                         />
                     </Avatar>
-                </Button>
+                </div>
                 <div>
                     <h1 className="Font-medium text-lg">
-                        {job?.company?.name}
+                        {job?.company?.name || "Unknown Company"}
                     </h1>
-                    <p className="font-sm text-gray-500">India</p>
+                    <p className="font-sm text-gray-500">{job?.location || "India"}</p>
                 </div>
             </div>
 
             <div>
                 <h1 className="font-bold text-lg my-2">{job?.title}</h1>
-                <p className="font-sm text-gray-600">{job?.desciption}</p>
+                <p className="font-sm text-gray-600">{job?.description}</p>
             </div>
 
             <div className="flex items-center gap-2 mt-4">
