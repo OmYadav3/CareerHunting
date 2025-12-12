@@ -13,10 +13,13 @@ const useGetAllJobs = () => {
                 const endpoint = searchedQuery
                     ? `${JOB_API_END_POINT}/all?keyword=${searchedQuery}`
                     : `${JOB_API_END_POINT}/all`;
-
+                console.log(searchedQuery, "searchedQuery")
+                console.log(endpoint, "ENDPOINT")
                 const res = await axios.get(endpoint, {
                     withCredentials: true,
                 });
+                console.log(res, "response")
+
 
                 if (res.data.success) {
                     dispatch(setAllJobs(res.data.jobs));
@@ -30,3 +33,22 @@ const useGetAllJobs = () => {
 };
 
 export default useGetAllJobs;
+
+
+// const useGetAllJobs = () => {
+//     const dispatch = useDispatch();
+//     const {searchedQuery} = useSelector(store=>store.job);
+//     useEffect(()=>{
+//         const fetchAllJobs = async () => {
+//             try {
+//                 const res = await axios.get(`${JOB_API_END_POINT}/get?keyword=${searchedQuery}`,{withCredentials:true});
+//                 if(res.data.success){
+//                     dispatch(setAllJobs(res.data.jobs));
+//                 }
+//             } catch (error) {
+//                 console.log(error);
+//             }
+//         }
+//         fetchAllJobs();
+//     },[])
+// }
